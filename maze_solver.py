@@ -10,22 +10,25 @@ def solveMazeGeneral(maze, algorithm):
 		fr = Fringe("FIFO")
 	elif algorithm == "DFS":
 		fr = Fringe("STACK")
+	elif algorithm == "UCS":
+		fr = Fringe("PRIO")
 	else:
 		print("algorithm not found/implemented, exit")
-		return;
+		return
 	
 	room = maze.getRoom(*maze.getStart())
 	state = State(room, None)
-	fr.push(state)	
+	fr.push((0, state))	
 	
 	#creates a list of all visited rooms
 	visited_rooms = [str(room.coords)]
 
 	while not fr.isEmpty():
 	
-		state = fr.pop()
+		state = fr.pop()[1]
 		room = state.getRoom()
-	
+		print(str(room.coords))
+
 		if room.isGoal():
 			print("solved")
 			fr.printStats()
@@ -38,12 +41,11 @@ def solveMazeGeneral(maze, algorithm):
 			#get new room after move and cost to get there
 			newRoom, cost = room.makeMove(d, state.getCost())
 			newState = State(newRoom, state, cost)
-			
+			priority_tuple = (cost, newState)
 			#before pushing a new state, checks if it's in our list
 			if not str(newRoom.coords) in visited_rooms:
 				visited_rooms.append(str(newRoom.coords))
-				fr.push(newState)  
+				fr.push((cost, newState))
 
 	print("not solved")
 	fr.printStats()
-
