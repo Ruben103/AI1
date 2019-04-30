@@ -39,7 +39,7 @@ def solveMazeGeneral(maze, algorithm):
 			newRoom, cost = room.makeMove(d, state.getCost())
 			newState = State(newRoom, state, cost)
 			
-			#before pushing a new state, checks if it's in our list
+			#before  
 			if not str(newRoom.coords) in visited_rooms:
 				visited_rooms.append(str(newRoom.coords))
 				fr.push(newState)  
