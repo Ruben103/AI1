@@ -27,7 +27,7 @@ def solveMazeGeneral(maze, algorithm):
 	elif algorithm == "DFS" or IDS:
 		fr = Fringe("STACK")
 		if IDS:
-			secondFr = Fringe("FIFO")
+			queue = Fringe("FIFO")
 			maxDepth = 3 # The l value
 	elif algorithm == "UCS" or GREEDY:
 		fr = Fringe("PRIO")
@@ -72,13 +72,13 @@ def solveMazeGeneral(maze, algorithm):
 			#before pushing a new state, checks if it's in our list
 			if not str(newRoom.coords) in visited_rooms:
 				if IDS and state.prio > maxDepth:
-					secondFr.push(priority_tuple)
+					queue.push(priority_tuple)
 				else:
 					visited_rooms.append(str(newRoom.coords))
 					fr.push(priority_tuple)
 		
 		if IDS and fr.isEmpty and not secondFr.isEmpty():
-			fr.push(secondFr.pop())
+			fr.push(queue.pop())
 			maxDepth += 3
 
 
