@@ -6,6 +6,7 @@ from state import State
 
 # Calculates straight distance from room to goal. 
 # Keeps cost of level changes in mind.
+# Heuristic function for Greedy & A*
 def estimatedDistance(maze, room):
 	goal = maze.getGoal()
 	loc = room.coords
@@ -17,13 +18,14 @@ def estimatedDistance(maze, room):
 		estCost += dist ** 2
 	return estCost ** 0.5
 
-def solveMazeGeneral(maze, algorithm):
+def solveMazeGeneral(maze, algorithm, l = 1, maxL = 1000):
 	ASTAR = True if algorithm == "ASTAR" else False
 	GREEDY= True if algorithm == "GREEDY" or ASTAR else False
+	IDS   = True if algorithm == "IDS" else False
 	# Select the right queue
 	if algorithm == "BFS":
 		fr = Fringe("FIFO")
-	elif algorithm == "DFS":
+	elif algorithm == "DFS" or IDS:
 		fr = Fringe("STACK")
 	elif algorithm == "UCS" or GREEDY:
 		fr = Fringe("PRIO")
@@ -32,19 +34,23 @@ def solveMazeGeneral(maze, algorithm):
 		return
 
 	room = maze.getRoom(*maze.getStart())
-	state = State(room, None, 0, estimatedDistance(maze, room))
-	fr.push((state.prio, state))	
+	prio = estimatedDistance(maze, room) if GREEDY or ASTAR else 0
+	state = State(room, None, 0, prio)
+	# Create priority tuple in case of prio queue
+	priority_tuple = (prio, state)
+	fr.push(priority_tuple)	
 	
 	# Create list of visited rooms
 	visited_rooms = [str(room.coords)]
 
 	while not fr.isEmpty():
-	
+		
+		# Pop Tuple from fring
 		priority_tuple = fr.pop()
+		# Read cost and state from tuple
 		cost = priority_tuple[0]
 		state = priority_tuple[1]
 		room = state.getRoom()
-		print(str(room.coords))
 
 		if room.isGoal(): # Maze completed.
 			print("solved")
@@ -57,16 +63,23 @@ def solveMazeGeneral(maze, algorithm):
 		for d in room.getConnections():
 			# Create new room and determine cost
 			newRoom, cost = room.makeMove(d, state.getCost())
-			newState = State(newRoom, state, cost)
-			# for GREEDY/A*
-			if GREEDY:
-				cost = estimatedDistance(maze, newRoom)
-				cost += state.cost if ASTAR else 0 # add path so far for A*
-			priority_tuple = (cost, newState)
-			#before pushing a new state, checks if it's in our list
-			if not str(newRoom.coords) in visited_rooms:
-				visited_rooms.append(str(newRoom.coords))
-				fr.push(priority_tuple)
+			newState = State(newRoom, state, cost, state.prio + 1)
 
-	print("not solved")
-	fr.printStats()
+			if GREEDY: #or A*
+				cost = estimatedDistance(maze, newRoom)
+				# add path so far in case of A*
+				cost += state.cost if ASTAR else 0
+			
+			priority_tuple = (cost, newState)
+			# If state was not visited beforre
+			if not str(newRoom.coords) in visited_rooms:
+				# Add to list of visited state
+				visited_rooms.append(str(newRoom.coords))
+				if not IDS or newState.prio <= l:
+					fr.push(priority_tuple)
+	# In case of IDS in																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																				```````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````																	```````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````
+	if IDS and fr.isEmpty and l < maxL:
+		solveMazeGeneral(maze, algorithm, l+1, maxL)
+	else: 
+		print("not solved")
+		fr.printStats()
