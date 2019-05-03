@@ -77,9 +77,9 @@ def solveMazeGeneral(maze, algorithm, l = 1, maxL = 1000):
 				visited_rooms.append(str(newRoom.coords))
 				if not IDS or newState.prio <= l:
 					fr.push(priority_tuple)
-	# In case of IDS in																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																				```````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````																	```````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````
+	# In case of IDS and still under maximum Depth:
 	if IDS and fr.isEmpty and l < maxL:
-		solveMazeGeneral(maze, algorithm, l+1, maxL)
+		solveMazeGeneral(maze, algorithm, l+1, maxL) #change the '1' to alter increment size
 	else: 
 		print("not solved")
 		fr.printStats()
