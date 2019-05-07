@@ -129,7 +129,6 @@ def random_search(board):
 
 def hill_climbing(board):
     """
-    Board is a randomly initialized board in main.
     Algorithm:
         For each column; check which position in that row minimizes the heuristic function of having 
         the least conflicts. Move the queen to that position in the column.
@@ -139,7 +138,8 @@ def hill_climbing(board):
     for column in range(len(board)):
         boardCopy = board.copy()
         minHeuristic = count_conflicts(board)
-        for row in range(len(board)): #iterate over the rows for each column
+        for row in range(len(board)): 
+            #iterate over the rows for each column
             boardCopy[column] = row
             currentHeuristic = count_conflicts(boardCopy)
             if currentHeuristic < minHeuristic:
