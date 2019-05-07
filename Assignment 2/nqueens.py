@@ -135,27 +135,15 @@ def hill_climbing(board):
         the least conflicts. Move the queen to that position in the column.
         Go to next column
     """
-
-    boardCopy = board
+    
     for column in range(len(board)):
+        boardCopy = board.copy()
         minHeuristic = count_conflicts(board)
-        currentState = board[column]
-        for row in range(len(board)): #iterate over the rows in
-            print("iteration" + str(column) + str(row) + "\n")
-            print_board(board)
+        for row in range(len(board)): #iterate over the rows for each column
             boardCopy[column] = row
             currentHeuristic = count_conflicts(boardCopy)
-            print("currHeur = " +str(currentHeuristic) )
-            print("minHeur = " +str(minHeuristic) + "\n")
             if currentHeuristic < minHeuristic:
                 board[column] = row
-
-    """
-    Implement this yourself.
-    :param board:
-    :return:
-    """
-    pass
 
 
 def simulated_annealing(board):
