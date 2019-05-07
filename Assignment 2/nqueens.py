@@ -12,6 +12,7 @@ def in_conflict(column, row, other_column, other_row):
     :param other_column: Column of queen 2.
     :param other_row: Row of queen 2.
     :return: True if the queens are in conflict, else False.
+    
     """
     if column == other_column:
         return True  # Same column
