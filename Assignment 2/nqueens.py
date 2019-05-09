@@ -59,7 +59,6 @@ def evaluate_state(board):
     Evaluation function. The maximal number of queens in conflict can be 1 + 2 + 3 + 4 + .. +
     (nquees-1) = (nqueens-1)*nqueens/2. Since we want to do ascending local searches, the evaluation function returns
     (nqueens-1)*nqueens/2 - countConflicts().
-
     :param board: list/array representation of columns and the row of the queen on that column
     :return: evaluation score
     """
@@ -127,24 +126,63 @@ def random_search(board):
     print('Final state is:')
     print_board(board)
 
+def sidestepping(board):
+    returnBoard = board.copy()
+    nqueens = len(returnBoard)
+    for column in returnBoard:
+        rand = random.uniform(0,1)
+        multiplier = 0
+        if returnBoard[column] > 0 and returnBoard[column] < nqueens-1:
+            bothWays = True
+        else:
+            bothWays = False
+        if not bothWays:
+            if returnBoard[column] == 0:
+                multiplier = 1
+            else:
+                multiplier = -1
+            returnBoard[column] += multiplier
+            continue
+        if rand < 0.45: #go down
+            returnBoard[column] += 1
+        if rand > 0.55:
+            returnBoard[column] -= 1
+    return returnBoard
+
+
+
+
 def hill_climbing(board):
     """
     Algorithm:
-        For each column; check which position in that row minimizes the heuristic function of having 
-        the least conflicts. Move the queen to that position in the column.
-        Go to next column
+        Additional while loop implemented such that the algorithm keeps searching for bette solutions using
+        sidestepping() until there is no improvement found n-times (improvementCounter).
+        We can modify this counter to have it search more or fewer times.
     """
-    
-    for column in range(len(board)):
-        boardCopy = board.copy()
-        minHeuristic = count_conflicts(board)
-        for row in range(len(board)): 
-            #iterate over the rows for each column
-            boardCopy[column] = row
-            currentHeuristic = count_conflicts(boardCopy)
-            if currentHeuristic < minHeuristic:
-                board[column] = row
+    improvementCounter = 3
+    boardCopy = board.copy()
 
+    while improvementCounter != 0:
+        for column in range(len(board)):
+            minHeuristic = count_conflicts(board)
+            for row in range(len(board)): 
+                #iterate over the rows for each column
+                boardCopy[column] = row
+                currentHeuristic = count_conflicts(boardCopy)
+                if currentHeuristic < minHeuristic:
+                    minHeuristic = currentHeuristic
+                    board[column] = row
+
+        boardCopy = sidestepping(boardCopy)
+        prelConflicts = count_conflicts(boardCopy)
+        if prelConflicts < minHeuristic:
+            board = boardCopy.copy()
+            minHeuristic = prelConflicts
+            improvementCounter = 3
+        else:
+            improvementCounter -= 1
+
+    return count_conflicts(board)
 
 def simulated_annealing(board):
     """
@@ -197,8 +235,10 @@ def main():
     if algorithm is 3:
         simulated_annealing(board)
     
-    print('Modified board: \n')
+    numberConflicts = count_conflicts(board)
+    print('\nModified board:')
     print_board(board)
+    print("Conflicting queens: " + str(numberConflicts) )
 
 
 # This line is the starting point of the program.
