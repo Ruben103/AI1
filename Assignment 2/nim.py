@@ -32,38 +32,41 @@ def min_value(state):
 def minimax_decision(state, turn):
     bestmove = None
 
-    if turn == 1:  # MAX' turn
+    if turn == 0:  # MAX' turn
         max = -100000000000
 
         for move in range(1, 4):
-            m = max_value(state - move)
-            if m > max:
-                max = m
-                bestmove = move
+            if state - move > 0:
+                m = min_value(state - move)
+                if m > max:
+                    max = m
+                    bestmove = move
 
     else:
         min = 10000000000000
 
         for move in range(1, 4):
-            m = min_value(state-move)
-            if m < min:
-                min = m
-                bestmove = move
+            if state - move > 0:
+                m = max_value(state-move)
+                if m < min:
+                    min = m
+                    bestmove = move
 
     return bestmove
 
 
 def negamax_value(state, turn):
+    nmax = -100000000000
+
     if state == 1:
-        return -1 #Check if correct
-    
-    max = -100000000000
+        return -1
+
     for move in range(1, 4):
         if state-move > 0:
             m = -negamax_value(state-move, 1 - turn)
-            max = m if m > max else max
+            nmax = m if m > nmax else nmax
 
-    return max
+    return nmax
 
 
 def negamax_decision(state, turn):
@@ -71,19 +74,20 @@ def negamax_decision(state, turn):
     max = -100000000000
 
     for move in range(1, 4):
-        m = negamax_value(state - move, turn)
-        if m > max:
-            max = m
-            bestmove = move
+        if state - move > 0:
+            m = -negamax_value(state - move, turn)
+            if m > max:
+                max = m
+                bestmove = move
 
     return bestmove
-        
+
 
 def play_nim(state):
     turn = 0
 
     while state != 1:
-        move = minimax_decision(state, turn)
+        move = negamax_decision(state, turn)
         print(str(state) + ": " + ("MAX" if not turn else "MIN") + " takes " + str(move))
 
         state -= move
