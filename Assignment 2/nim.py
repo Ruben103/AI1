@@ -1,123 +1,46 @@
 import sys
 
-
-def max_value(state):
-    max = -100000000000
-
-    if state == 1:
-        return -1
-
-    for move in range(1, 4):
-        if state-move > 0:
-            m = min_value(state-move)
-            max = m if m > max else max
-
-    return max
-
-
-def min_value(state):
-    min = 10000000000000
-
-    if state == 1:
-        return 1
-
-    for move in range(1, 4):
-        if state-move > 0:
-            m = max_value(state-move)
-            min = m if m < min else min
-
-    return min
-
-
-def minimax_decision(state, turn):
-    bestmove = None
-
-    if turn == 0:  # MAX' turn
-        max = -100000000000
-
-        for move in range(1, 4):
-            if state - move > 0:
-                m = min_value(state - move)
-                if m > max:
-                    max = m
-                    bestmove = move
-
-    else:
-        min = 10000000000000
-
-        for move in range(1, 4):
-            if state - move > 0:
-                m = max_value(state-move)
-                if m < min:
-                    min = m
-                    bestmove = move
-
-    return bestmove
-
-
-def negamax_value(state, turn):
-    max = -100000000000
-
-    if state == 1:
-        return -1
-
-    for move in range(1, 4):
-        if state-move > 0:
-            m = -negamax_value(state-move, 1 - turn)
-            max = m if m > max else max
-
-    return max
-
-
-def negamax_decision(state, turn):
-    bestmove = None
-    max = -100000000000
-
-    for move in range(1, 4):
-        if state - move > 0:
-            m = -negamax_value(state - move, turn)
-            if m > max:
-                max = m
-                bestmove = move
-
-    return bestmove
-
-
-def negamax_full(state, turn, transTable):
+def negamax_full(state, transTable):
     bestmove = None
     max = -10000000000
 
     if state == 1:
-        return -1, -1
+        transTable[state] = [1, -1]
+        return 1, -1
 
+    # Transposition Table: If state is evaluated before, return those results.
     if transTable[state] != [0,0]:
         return transTable[state]
 
     for move in range(1, 4):
         if state - move > 0:
-            m = -negamax_full(state-move, turn, transTable)[1]
+            m = -negamax_full(state-move, transTable)[1] # Switch to other player
             if m > max:
                 max = m
                 bestmove = move
     
+    # Add results to transposition table
     transTable[state] = [bestmove, max]
     return bestmove, max               
 
 def play_nim(state):
     turn = 0
-    transTable = [[0, 0]] * (state+1)
+    transTable = [[0, 0]] * (state+1) # [bestmove, eval]
 
     while state != 1:
-        move = negamax_full(state, turn, transTable)[0]
-        print(str(state) + ": " + ("MAX" if not turn else "MIN") + " takes " + str(move))
+        move, eval = negamax_full(state, transTable) # Turn not necessary for Negamax
+#        print(str(state) + ": " + ("MAX" if not turn else "MIN") + " takes " + str(move))
 
         state -= move
         turn = 1 - turn
 
-    print("1: " + ("MAX" if not turn else "MIN") + " looses")
-#    for i, s in enumerate(transTable):
-#        winning = "winning" if s[1] == 1 else "losing"
-#        print(f"{i} straws. Take {s[0]}. you are {winning}")
+#    print("1: " + ("MAX" if not turn else "MIN") + " looses")
+    
+    debug = 0 # Change to print: All States + Optimal action + Winning Position
+    for i, s in enumerate(transTable):
+        if i and debug:
+            winning = "winning" if s[1] == 1 else "losing"
+            print(f"{i} straws. Take {s[0]}. you are {winning}")
 
 
 def main():
