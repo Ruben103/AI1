@@ -56,7 +56,7 @@ def minimax_decision(state, turn):
 
 
 def negamax_value(state, turn):
-    nmax = -100000000000
+    max = -100000000000
 
     if state == 1:
         return -1
@@ -64,9 +64,9 @@ def negamax_value(state, turn):
     for move in range(1, 4):
         if state-move > 0:
             m = -negamax_value(state-move, 1 - turn)
-            nmax = m if m > nmax else nmax
+            max = m if m > max else max
 
-    return nmax
+    return max
 
 
 def negamax_decision(state, turn):
@@ -83,17 +83,41 @@ def negamax_decision(state, turn):
     return bestmove
 
 
+def negamax_full(state, turn, transTable):
+    bestmove = None
+    max = -10000000000
+
+    if state == 1:
+        return -1, -1
+
+    if transTable[state] != [0,0]:
+        return transTable[state]
+
+    for move in range(1, 4):
+        if state - move > 0:
+            m = -negamax_full(state-move, turn, transTable)[1]
+            if m > max:
+                max = m
+                bestmove = move
+    
+    transTable[state] = [bestmove, max]
+    return bestmove, max               
+
 def play_nim(state):
     turn = 0
+    transTable = [[0, 0]] * (state+1)
 
     while state != 1:
-        move = negamax_decision(state, turn)
+        move = negamax_full(state, turn, transTable)[0]
         print(str(state) + ": " + ("MAX" if not turn else "MIN") + " takes " + str(move))
 
         state -= move
         turn = 1 - turn
 
     print("1: " + ("MAX" if not turn else "MIN") + " looses")
+#    for i, s in enumerate(transTable):
+#        winning = "winning" if s[1] == 1 else "losing"
+#        print(f"{i} straws. Take {s[0]}. you are {winning}")
 
 
 def main():
