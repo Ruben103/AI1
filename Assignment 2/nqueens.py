@@ -218,8 +218,12 @@ def probDistribution(T, E):
     The property that we want to decrease the probability of accepting a random walk as time increases
     is still preserved.
     """
-    p = 1/(math.exp(E/T) + 1) * 2
+    p = math.exp(E/T)
     return p
+
+def time_to_temperature(t):
+    T = 1000/(100*t)
+    return T
 
 def simulated_annealing(board):
     """
@@ -227,25 +231,30 @@ def simulated_annealing(board):
     :param board:
     :return:
     """
-    T = 20
-    stopCriterium = False
+    optimalState = (len(board)-1)*len(board)/2
     state = evaluate_state(board)
-    iteration = 1
-    while not stopCriterium:
-        T -= 1
+    iteration = 0
+    t = 0
+
+    while state != optimalState and t < 10:
+        t += 0.1
+        T = time_to_temperature(t)
+        print("\nT: " + str(T) + " t: " + str(t))
+        
         iteration += 1
-        print("\nIteration " + str(iteration))
+
         if T <= 0.05:
             return state
-        nextBoard = randomWalk(board.copy())
-        print("random walk: ")
-        print_board(nextBoard)
-        print("board: ")
-        print_board(board)
+
+        nextBoard = randomWalk(board)
+        # print("random walk: ")
+        # print_board(nextBoard)
+        # print("board: ")
+        # print_board(board)
         nextState = evaluate_state(nextBoard)
         E = nextState - state
         print("difference " + str(E))
-        if E > 0:
+        if E >= 0:
             # This means the next State is better:
             state = nextState
             board = nextBoard
@@ -257,6 +266,8 @@ def simulated_annealing(board):
             if p > rand:
                 board = nextBoard
                 state = nextState
+    print("last iteration: " + str(iteration))
+    return board
             
 
 def main():
@@ -300,7 +311,7 @@ def main():
     if algorithm is 2:
         hill_climbing(board)
     if algorithm is 3:
-        simulated_annealing(board)
+        board = simulated_annealing(board)
     
     numberConflicts = evaluate_state(board)
     print('Modified board:')
