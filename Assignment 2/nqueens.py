@@ -46,9 +46,9 @@ def count_conflicts(board):
     """
     cnt = 0
 
-    for column in range(0, len(board)):
-        for other in range(column, len(board)):
-            if in_conflict(column, board[column], other, board[other]):
+    for queen in range(0, len(board)):
+        for other_queen in range(queen+1, len(board)):
+            if in_conflict(queen, board[queen], other_queen, board[other_queen]):
                 cnt += 1
 
     return cnt
@@ -192,6 +192,95 @@ def simulated_annealing(board):
     """
     pass
 
+""" 
+ The following functions perform a genetic algorithm search
+"""
+
+def random_select(population):
+	""" 
+	random_select generates a random probability.
+	It then plucks a random member from the population and compares evaluates its 
+	fitness. This fitness score is converted to a probability of reproducing.
+	If said probability is greater than or equal to the initial random probability,
+	this individual will reproduce.
+	If not, then another individual is chosen at random and evaluated.
+	This is done n times, and if no suitable individual is found, the random probability is reduced.
+	"""
+	fitness_threshold = random.uniform(0,1)
+	while fitness_threshold >= 0:
+		n = len(population)
+		while n > 0:
+			parent = random.choice(population)
+			if (evaluate_state(parent) / ((len(parent) - 1) * len(parent) / 2)) >= fitness_threshold:
+				return parent
+			n -= 1
+		fitness_threshold -= 0.01
+	return population[0]
+
+def reproduce(parent_one, parent_two):
+	"""
+	reproduce combines the genome of two individuals by taking a random
+	index and splicing together each genome before and after that point. 
+	two parents only produce one child, for ease of returning the child.
+	"""
+	c = random.randint(1, len(parent_one) - 1)
+	child = parent_one[:c] + parent_two[c:]
+	return child
+
+def mutate(child):
+	"""
+	mutate randomly selects and alters one chromozome in a genome
+	"""
+	c = random.randint(0, len(child) - 1)
+	child[c] = random.randint(0, len(child) - 1)
+	return child
+
+def best_individual(population):
+	"""
+	best_individual searches through the population and returns the 
+	first individual with the highest fitness value, relative to the optimal fitness
+	"""
+	optimum = (len(population[0]) - 1) * len(population[0]) / 2
+	while optimum > 0:
+		for individual in population:
+			if evaluate_state(individual) == optimum:
+				return individual
+		optimum -= 1
+	return population[0]
+
+def genetic_algorithm(board, nqueens):
+	"""
+	A population of 10 is randomly generated, 10 pairs of individuals are 
+	selected (duplicates possible) psuedo-randomly based on their fitness.
+	10 children are created to form a new population. This continues for 100 
+	generations, or until a solution is found.
+	"""
+	population = []
+	population.append(board)
+	generations = 0
+	for d in range(1, 10):
+		population.append(init_board(nqueens))
+	while generations < 100:
+		new_population = []
+		for i in range(0, 10):
+			parent_one = random_select(population)
+			parent_two = random_select(population)
+			child = reproduce(parent_one, parent_two)
+			mutation = random.random()
+			if mutation > 0.97:
+				child = mutate(child)
+			if evaluate_state(child) == ((len(child) - 1) * len(child) / 2):
+				print('\nSolved puzzle in ' + str(generations) + ' generations!')
+				board = child.copy()
+				return board
+			new_population.append(child)
+		population = new_population.copy()
+		generations += 1
+	best = best_individual(population)
+	board = best.copy()
+	return board
+
+
 
 def main():
     """
@@ -212,12 +301,12 @@ def main():
         return False
 
     print('Which algorithm to use?')
-    algorithm = input('1: random, 2: hill-climbing, 3: simulated annealing \n')
+    algorithm = input('1: random, 2: hill-climbing, 3: simulated annealing, 4: genetic algorithm \n')
 
     try:
         algorithm = int(algorithm)
 
-        if algorithm not in range(1, 4):
+        if algorithm not in range(1, 5):
             raise ValueError
 
     except ValueError:
@@ -234,6 +323,8 @@ def main():
         hill_climbing(board)
     if algorithm is 3:
         simulated_annealing(board)
+    if algorithm is 4:
+        board = genetic_algorithm(board, nqueens)
     
     numberConflicts = count_conflicts(board)
     print('\nModified board:')
