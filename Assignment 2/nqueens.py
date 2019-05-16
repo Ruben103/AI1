@@ -1,5 +1,6 @@
 import sys
 import random
+import math
 
 MAXQ = 100
 
@@ -100,7 +101,6 @@ def init_board(nqueens):
 ------------------ Do not change the code above! ------------------
 """
 
-
 def random_search(board):
     """
     This function is an example and not an efficient solution to the nqueens problem. What it essentially does is flip
@@ -149,9 +149,6 @@ def sidestepping(board):
             returnBoard[column] -= 1
     return returnBoard
 
-
-
-
 def hill_climbing(board):
     """
     Algorithm:
@@ -184,14 +181,83 @@ def hill_climbing(board):
 
     return count_conflicts(board)
 
+    while improvementCounter != 0:
+        for column in range(len(board)):
+            minHeuristic = count_conflicts(board)
+            for row in range(len(board)): 
+                #iterate over the rows for each column
+                boardCopy[column] = row
+                currentHeuristic = count_conflicts(boardCopy)
+                if currentHeuristic < minHeuristic:
+                    minHeuristic = currentHeuristic
+                    board[column] = row
+
+        boardCopy = sidestepping(boardCopy)
+        prelConflicts = count_conflicts(boardCopy)
+        if prelConflicts < minHeuristic:
+            board = boardCopy.copy()
+            minHeuristic = prelConflicts
+            improvementCounter = 3
+        else:
+            improvementCounter -= 1
+
+    return count_conflicts(board)
+
+def randomWalk(board):
+	rand1 = random.randint(1, len(board) - 1)
+	rand2 = random.randint(0, len(board) - 1)
+	board[rand1] = rand2
+	return board
+
+def probDistribution(T, E):
+    """
+    This distribution is a variation of the Fermi Dirac equation used in physics.
+    The nice aspect of it, is that for high values of T, the probability is high (which we want)
+    While for low values of T, the probability low.
+    We adapted the while loop such that we decrement T instead of incrementing (like the assignment said)
+    The property that we want to decrease the probability of accepting a random walk as time increases
+    is still preserved.
+    """
+    p = 1/(math.exp(E/T) + 1) * 2
+    return p
+
 def simulated_annealing(board):
     """
     Implement this yourself.
     :param board:
     :return:
     """
-    pass
-
+    T = 20
+    stopCriterium = False
+    state = evaluate_state(board)
+    iteration = 1
+    while not stopCriterium:
+        T -= 1
+        iteration += 1
+        print("\nIteration " + str(iteration))
+        if T <= 0.05:
+            return state
+        nextBoard = randomWalk(board.copy())
+        print("random walk: ")
+        print_board(nextBoard)
+        print("board: ")
+        print_board(board)
+        nextState = evaluate_state(nextBoard)
+        E = nextState - state
+        print("difference " + str(E))
+        if E > 0:
+            # This means the next State is better:
+            state = nextState
+            board = nextBoard
+            
+        else:
+            rand = random.uniform(0,1)
+            p = probDistribution(T, E)
+            print("Probability: " + str(p) + " \nrandom number: " + str(rand) + "\n")
+            if p > rand:
+                board = nextBoard
+                state = nextState
+            
 
 def main():
     """
@@ -227,6 +293,7 @@ def main():
     board = init_board(nqueens)
     print('Initial board: \n')
     print_board(board)
+    print("Conflicting queens: " + str(count_conflicts(board)))
 
     if algorithm is 1:
         random_search(board)
@@ -235,10 +302,10 @@ def main():
     if algorithm is 3:
         simulated_annealing(board)
     
-    numberConflicts = count_conflicts(board)
-    print('\nModified board:')
+    numberConflicts = evaluate_state(board)
+    print('Modified board:')
     print_board(board)
-    print("Conflicting queens: " + str(numberConflicts) )
+    print("Evaluate state: " + str(numberConflicts) )
 
 
 # This line is the starting point of the program.
