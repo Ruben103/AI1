@@ -235,7 +235,9 @@ def simulated_annealing(board):
     iteration = 0
     t = 0
 
-    while state != optimalState and t < 10:
+    nextBoard = board
+
+    while state != optimalState and t < 100:
         t += 0.01
         T = time_to_temperature(t)
         #print("\nT: " + str(T) + " t: " + str(t))
@@ -247,7 +249,7 @@ def simulated_annealing(board):
         nextBoard = randomWalk(board.copy())
         nextState = evaluate_state(nextBoard)
         E = nextState - state
-        print("difference " + str(E))
+        #print("difference " + str(E))
         if E >= 0:
             # This means the next State is better:
             state = nextState
@@ -388,12 +390,20 @@ def main():
     print_board(board)
     print("Eval start state: " + str(evaluate_state(board)))
 
+    states = []
+    optimumCounter = 0
+    optimum = ((len(board)-1) * len(board)/2)
+    iterations = 100
+
     if algorithm is 1:
         random_search(board)
     if algorithm is 2:
         hill_climbing(board)
     if algorithm is 3:
-        board = simulated_annealing(board)
+        for x in range(iterations):
+            board = simulated_annealing(board)
+            states.append(evaluate_state(board))
+            board = init_board(nqueens)
     if algorithm is 4:
         board = genetic_algorithm(board, nqueens)
     
@@ -401,6 +411,15 @@ def main():
     print('Modified board:')
     print_board(board)
     print("Evaluate state: " + str(numberConflicts) )
+
+
+
+    for x in states:
+        if x == optimum:
+            optimumCounter += 1
+    print("\nSucces ratio: " + str(optimumCounter/iterations))
+
+
 
 
 # This line is the starting point of the program.
