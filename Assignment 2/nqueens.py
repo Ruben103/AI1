@@ -232,7 +232,6 @@ This function updates the board according to the Simulated Annealing algorithm
 def simulated_annealing(board):
     optimalState = (len(board)-1)*len(board)/2
     state = evaluate_state(board)
-    iteration = 0
     t = 0
 
     nextBoard = board
@@ -240,8 +239,6 @@ def simulated_annealing(board):
     while state != optimalState and t < 1000:
         t += 0.01
         T = time_to_temperature(t)
-        #print("\nT: " + str(T) + " t: " + str(t))
-        iteration += 1
 
         if T <= 0.1:
             return board
@@ -249,22 +246,18 @@ def simulated_annealing(board):
         nextBoard = randomWalk(board.copy())
         nextState = evaluate_state(nextBoard)
         E = nextState - state
-        #print("difference " + str(E))
         if E >= 0:
-            # This means the next State is better:
             state = nextState
             board = nextBoard
             
         else:
             rand = random.uniform(0,1)
             p = probDistribution(T, E)
-            #print("Probability: " + str(p) + " \nrandom number: " + str(rand) + "\n")
             if p > rand:
                 board = nextBoard
                 state = nextState
     board = nextBoard.copy()
     return board
-    print("last iteration: " + str(iteration))
             
 """ 
  The following functions perform a genetic algorithm search
