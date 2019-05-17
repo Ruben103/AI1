@@ -400,6 +400,8 @@ def main():
     if algorithm is 4:
         board = genetic_algorithm(board, nqueens)
 
+    print("Optimum: " + str(optimum) + "\n")
+
     for i in range(iterations):
         print(states[i], end = " ")
 
