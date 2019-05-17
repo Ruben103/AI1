@@ -237,7 +237,7 @@ def simulated_annealing(board):
 
     nextBoard = board
 
-    while state != optimalState and t < 100:
+    while state != optimalState and t < 1000:
         t += 0.01
         T = time_to_temperature(t)
         #print("\nT: " + str(T) + " t: " + str(t))
@@ -406,18 +406,14 @@ def main():
             board = init_board(nqueens)
     if algorithm is 4:
         board = genetic_algorithm(board, nqueens)
-    
-    numberConflicts = evaluate_state(board)
-    print('Modified board:')
-    print_board(board)
-    print("Evaluate state: " + str(numberConflicts) )
 
-
+    for i in range(iterations):
+        print(states[i], end = " ")
 
     for x in states:
         if x == optimum:
             optimumCounter += 1
-    print("\nSucces ratio: " + str(optimumCounter/iterations))
+    print("\n\nSucces ratio: " + str(optimumCounter/iterations))
 
 
 
