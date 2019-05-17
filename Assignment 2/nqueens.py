@@ -222,35 +222,29 @@ def probDistribution(T, E):
     return p
 
 def time_to_temperature(t):
-    T = 1000/(100*t)
+    T = 1000/(10*t)
     return T
 
+"""
+This function updates the board according to the Simulated Annealing algorithm
+"""
+
 def simulated_annealing(board):
-    """
-    Implement this yourself.
-    :param board:
-    :return:
-    """
     optimalState = (len(board)-1)*len(board)/2
     state = evaluate_state(board)
     iteration = 0
     t = 0
 
     while state != optimalState and t < 10:
-        t += 0.1
+        t += 0.01
         T = time_to_temperature(t)
-        print("\nT: " + str(T) + " t: " + str(t))
-        
+        #print("\nT: " + str(T) + " t: " + str(t))
         iteration += 1
 
-        if T <= 0.05:
-            return state
+        if T <= 0.1:
+            return board
 
-        nextBoard = randomWalk(board)
-        # print("random walk: ")
-        # print_board(nextBoard)
-        # print("board: ")
-        # print_board(board)
+        nextBoard = randomWalk(board.copy())
         nextState = evaluate_state(nextBoard)
         E = nextState - state
         print("difference " + str(E))
@@ -262,12 +256,13 @@ def simulated_annealing(board):
         else:
             rand = random.uniform(0,1)
             p = probDistribution(T, E)
-            print("Probability: " + str(p) + " \nrandom number: " + str(rand) + "\n")
+            #print("Probability: " + str(p) + " \nrandom number: " + str(rand) + "\n")
             if p > rand:
                 board = nextBoard
                 state = nextState
-    print("last iteration: " + str(iteration))
+    board = nextBoard.copy()
     return board
+    print("last iteration: " + str(iteration))
             
 """ 
  The following functions perform a genetic algorithm search
@@ -391,20 +386,16 @@ def main():
     board = init_board(nqueens)
     print('Initial board: \n')
     print_board(board)
-    print("Conflicting queens: " + str(count_conflicts(board)))
+    print("Eval start state: " + str(evaluate_state(board)))
 
     if algorithm is 1:
         random_search(board)
     if algorithm is 2:
         hill_climbing(board)
     if algorithm is 3:
-<<<<<<< HEAD
         board = simulated_annealing(board)
-=======
-        simulated_annealing(board)
     if algorithm is 4:
         board = genetic_algorithm(board, nqueens)
->>>>>>> 9ca2a330bfc904fb23958edd9753569faa6719c2
     
     numberConflicts = evaluate_state(board)
     print('Modified board:')
