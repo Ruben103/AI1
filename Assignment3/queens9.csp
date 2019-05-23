@@ -1,0 +1,15 @@
+variables:
+  queen[9] : integer;
+
+domains:
+  queen <- [0..8];
+
+constraints:
+  alldiff(queen);
+  forall (q in [0..8])
+    forall (row in [1..(8-q)])
+      row <> abs(queen[q] - queen[q + row]);
+    end
+  end
+
+solutions: all

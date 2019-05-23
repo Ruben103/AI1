@@ -1,0 +1,19 @@
+#cryptarithmetic puzzle: UN + UN + NEUF = ONZE
+
+variables:
+  U, N, E, F, O, Z : integer;
+  c1, c2, c3 : integer;
+	
+domains:
+  U, N, O <- [1..9];
+  E, F, Z <- [0..9];
+  c1, c2, c3 <- [0..2];
+
+constraints:
+  alldiff(U,N,E,F,O,Z);
+  2*N + F = E + 10*c1;
+  c1 + 3*U = Z + 10*c2;
+  c2 + E = N + 10*c3;
+  c3 + N = O;
+
+solutions: all

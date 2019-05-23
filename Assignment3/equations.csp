@@ -1,0 +1,14 @@
+#The set of variables of the CSP
+variables:
+    	A,B,C : integer;
+#Here the domains are defined
+domains:
+    	A,B,C <- [0..250];
+#Here are the constraints:
+constraints:
+    	A + B = 5*C;
+    	B + C = 3*A;
+    	A * B * C = 42;
+# Here you can specify in how many solutions
+# you are interested (all, 1, 2, 3, ...)
+solutions: all

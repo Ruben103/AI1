@@ -1,0 +1,21 @@
+#cryptarithmetic puzzle: ONE + NINE + TWENTY + FIFTY = EIGHTY
+
+variables:
+  O, N, E, I, T, W, Y, F, G, H : integer;
+  c1, c2, c3, c4, c5 : integer;
+	
+domains:
+  O, N, T, F, E <- [1..9];
+  I, W, Y, G, H <- [0..9];
+  c1, c2, c3, c4, c5 <- [0..3];
+
+constraints:
+  alldiff(O, N, E, I, T, W, Y, F, G, H);
+  2*E + Y = 10*c1;
+  c1 + 2*N + T = 10*c2;
+  c2 + O + I + N + F = H + 10*c3;
+  c3 + N + E + I = G + 10*c4;
+  c4 + W + F = I + 10*c5;
+  c5 + T = E;
+
+solutions: all

@@ -1,0 +1,19 @@
+#cryptarithmetic puzzle: SEND + MORE = MONEY
+
+variables:
+  S, E, N, D, M, O, R, Y : integer;
+  c1, c2, c3 : integer;
+	
+domains:
+  S, M <- [1..9];
+  E, N, D, O, R, Y <- [0..9];
+  c1, c2, c3 <- [0..1];
+
+constraints:
+  alldiff(S, E, N, D, M, O, R, Y);
+  D + E = Y + 10*c1;
+  c1 + N + R = E + 10*c2;
+  c2 + E + O = N + 10*c3;
+  c3 + S + M = O + 10*M;
+
+solutions: all

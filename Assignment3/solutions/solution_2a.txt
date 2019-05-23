@@ -1,0 +1,42 @@
+### Solution 1 ###
+nr_orange = 	1 
+nr_grape = 	62 
+nr_melon = 	37 
+price_orange = 	88 
+price_grape = 	99 
+price_melon = 	102 
+
+### Solution 2 ###
+nr_orange = 	4 
+nr_grape = 	48 
+nr_melon = 	48 
+price_orange = 	88 
+price_grape = 	99 
+price_melon = 	102 
+
+### Solution 3 ###
+nr_orange = 	7 
+nr_grape = 	34 
+nr_melon = 	59 
+price_orange = 	88 
+price_grape = 	99 
+price_melon = 	102 
+
+### Solution 4 ###
+nr_orange = 	10 
+nr_grape = 	20 
+nr_melon = 	70 
+price_orange = 	88 
+price_grape = 	99 
+price_melon = 	102 
+
+### Solution 5 ###
+nr_orange = 	13 
+nr_grape = 	6 
+nr_melon = 	81 
+price_orange = 	88 
+price_grape = 	99 
+price_melon = 	102 
+
+Number of visited states: 25761
+Number of solutions: 5

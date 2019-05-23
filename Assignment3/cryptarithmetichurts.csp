@@ -1,0 +1,20 @@
+# cryptarithmetic puzzle: I + GUESS + THE + TRUTH = HURTS
+
+variables:
+  I, G, U, E, S, T, H, R : integer;
+  c1, c2, c3, c4 : integer;
+	
+domains:
+  I, G, T, H  <- [1..9];
+  U, E, S, R  <- [0..9];
+  c1, c2, c3, c4 <- [0..3];
+
+constraints:
+  alldiff(I, G, U, E, S, T, H, R);
+  I + E + H = 10*c1;
+  c1 + S + H  = 10*c2;
+  c2 + E + T + U = R + 10*c3;
+  c3 + R =  10*c4;
+  c4 + G + T = H;
+
+solutions: all

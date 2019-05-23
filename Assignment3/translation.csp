@@ -1,0 +1,20 @@
+variables:
+X0, X1, X2 : integer;
+X3, X4, X5 : integer;
+
+domains:
+X0 <- [0..100];
+X1 <- [0..100];
+X2 <- [0..100];
+X3 <- [0..1000];
+X4 <- [0..1000];
+X5 <- [0..1000];
+
+constraints:
+X3 = 88;
+X4 = 99;
+X5 = 102;
+X0 + X1 + X2 = 100;
+X0 * X3 + X1 * X4 + X2 * X5 = 10000;
+
+solutions:all

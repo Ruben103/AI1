@@ -1,0 +1,7 @@
+### Solution 1 ###
+A = 	3 
+B = 	7 
+C = 	2 
+
+Number of visited states: 4
+Number of solutions: 1

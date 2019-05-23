@@ -1,0 +1,17 @@
+variables:
+  p[20] : integer;
+
+domains:
+  p <- [2..72];
+
+constraints:
+  forall (i in [0..18])
+    p[i] < p[i+1];
+  end
+  forall (i in [0..19])
+    forall (j in [2..72])
+      any(j>=p[i], p[i] mod j <> 0);
+    end
+  end
+
+solutions: all

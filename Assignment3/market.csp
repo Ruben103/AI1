@@ -1,0 +1,20 @@
+variables:
+	nr_orange, nr_grape, nr_melon : integer;	
+	price_orange, price_grape, price_melon : integer;	
+	
+domains:
+	nr_orange <- [0..100];
+	nr_grape <- [0..100];
+	nr_melon <- [0..100];	
+	price_orange <- [0..1000];
+	price_grape <- [0..1000];
+	price_melon <- [0..1000];
+
+constraints:
+	price_orange = 88;
+	price_grape = 99;
+	price_melon = 102;
+	nr_orange + nr_grape + nr_melon = 100;
+	nr_orange*price_orange + nr_grape*price_grape + nr_melon*price_melon = 10000;
+
+solutions: all
