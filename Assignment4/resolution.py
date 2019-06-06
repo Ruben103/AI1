@@ -1,6 +1,7 @@
 #!/usr/bin/python
 
 import os
+import random
 
 class Clause:
     """
@@ -273,12 +274,32 @@ def print_proof(clause_set):
     idx = find_index_of_clause(empty_clause, clause_set)
     recursive_print_proof(idx, clause_set)
 
+def randomPremises(variables, n=15):
+    kb = []
+    for i in range(n):
+        string = '['
+        rand = random.random()
+        if rand > 0.5:
+            string += "~"
+        string += random.choice(variables)
+        for j in range(random.randint(0,5)):
+            string += ',~' + random.choice(variables)
+
+        string += ']'
+        kb.append(string)
+    return kb
+
 
 def main():
+    variables = ['p','q','r','s','t','u','v','w','x','y',]
+    premises = randomPremises(variables, 15)
+    
     kb = init()
 
     print("KB=", end='')
     print_clause_set(kb)
+
+    
 
     kb = resolution(kb)
 
