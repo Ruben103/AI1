@@ -20,7 +20,7 @@ def negamax_full(state, transTable):
                 bestmove = move
     
     # Add results to transposition table
-    transTable[state] = [bestmove, max]
+#    transTable[state] = [bestmove, max]
     return bestmove, max               
 
 def play_nim(state):

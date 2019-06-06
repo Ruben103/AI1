@@ -1,5 +1,7 @@
 #!/usr/bin/python
 
+import os
+
 class Clause:
     """
     A class for clauses. A clause consists of a list of positive and negative symbols.
@@ -244,7 +246,26 @@ def init():
 ##
 
 def recursive_print_proof(idx, clause_set):
-    print("Implement the function recursive_print_proof() yourself!")
+    for clause1 in clause_set[:idx-1]:
+        #for clause2 in clause_set[idx-1::-1]:
+        for clause2 in clause_set[:idx]:
+            if can_resolve(clause1, clause2):
+                resolvent = resolve_clauses(clause1, clause2)
+                if resolvent.equals(clause_set[idx]):
+                    index = find_index_of_clause(clause2, clause_set)
+                    recursive_print_proof(index, clause_set[:index+1])
+                    clause_set[idx].print_clause()
+                    print(" is inferred from ", end='')
+                    clause1.print_clause()
+                    print(" and ", end = "")
+                    clause2.print_clause()
+                    print("")
+                    return
+
+
+    return
+
+
 
 def print_proof(clause_set):
     empty_clause = Clause("")
@@ -272,4 +293,6 @@ def main():
         print("Resolution proof failed")
 
 if __name__ == "__main__":
+    os.system("clear")
     main()
+    

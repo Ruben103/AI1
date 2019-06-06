@@ -311,8 +311,9 @@ def genetic_algorithm(board, nqueens):
 
 def main():
     """
-    Main function that will parse input and call the appropriate algorithm. You do not need to understand everything
-    here!
+    Replace original main function by this function to perform the program a 
+    desired amount of times. The program will return a success rate range from
+    0 to 1, where 0 indicates a succes rate of 0%, and 1 indicates a succes rate of 100%.
     """
 
     try:
@@ -340,27 +341,26 @@ def main():
         print('Please input a number in the given range!')
         return False
 
-    board = init_board(nqueens)
-    print('Initial board: ', end = " ")
-    print_board(board)
-    print("Eval start state: " + str(evaluate_state(board)) + "\n")
+    optimumCounter = 0
+    optimum = ((len(board)-1) * len(board)/2)
+    print("Optimum: " + str(optimum) + "\n")
+    iterations = int(input("How many runs do you want?"))
 
-    if algorithm is 1:
-        random_search(board)
-    if algorithm is 2:
-        board = hill_climbing(board)
-    if algorithm is 3:
-        board = simulated_annealing(board)
-    if algorithm is 4:
-        board = genetic_algorithm(board, nqueens)
-    conflicts = count_conflicts(board)
+    for x in range(iterations):
+        board = init_board(nqueens)
+        if algorithm is 1:
+            random_search(board)
+        if algorithm is 2:
+            board = hill_climbing(board)
+        if algorithm is 3:
+            board = simulated_annealing(board)
+        if algorithm is 4:
+            board = genetic_algorithm(board, nqueens)
+        conflicts = count_conflicts(board)
+        optimumCounter += 1 if not conflicts else 0
+        print(optimum - conflicts, end = " ")
 
-    print("final board: ", end = "")
-    print_board(board)
-    evaluation = evaluate_state(board)
-    print("Eval finite state: " + str(evaluation))
-    print("Optimum: " + str(evaluation + conflicts))
-
+    print("\n\nSucces ratio: " + str(optimumCounter/iterations))
 
 # This line is the starting point of the program.
 if __name__ == "__main__":
