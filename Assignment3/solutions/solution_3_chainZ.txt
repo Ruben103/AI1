@@ -1,0 +1,2 @@
+Number of visited states: 27
+Number of solutions: 1

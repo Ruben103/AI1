@@ -1,0 +1,16 @@
+### Solution 1 ###
+I = 	5 
+G = 	2 
+U = 	6 
+E = 	8 
+S = 	1 
+T = 	4 
+H = 	7 
+R = 	9 
+c1 = 	2 
+c2 = 	1 
+c3 = 	1 
+c4 = 	1 
+
+Number of visited states: 9836
+Number of solutions: 1

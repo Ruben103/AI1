@@ -1,0 +1,7 @@
+	Chain Z
+Number of visited states: 27
+Number of solutions: 1
+
+	Chain A
+Number of visited states: 2502
+Number of solutions: 1

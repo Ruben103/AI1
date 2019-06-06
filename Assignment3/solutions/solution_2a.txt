@@ -38,5 +38,5 @@ price_orange = 	88
 price_grape = 	99 
 price_melon = 	102 
 
-Number of visited states: 25761
+Number of visited states: 10311
 Number of solutions: 5

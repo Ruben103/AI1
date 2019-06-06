@@ -1,0 +1,15 @@
+### Solution 1 ###
+S = 	9 
+E = 	5 
+N = 	6 
+D = 	7 
+M = 	1 
+O = 	0 
+R = 	8 
+Y = 	2 
+c1 = 	1 
+c2 = 	1 
+c3 = 	0 
+
+Number of visited states: 1349854
+Number of solutions: 1

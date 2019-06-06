@@ -1,0 +1,19 @@
+### Solution 1 ###
+O = 	9 
+N = 	8 
+E = 	4 
+I = 	5 
+T = 	3 
+W = 	6 
+Y = 	2 
+F = 	7 
+G = 	0 
+H = 	1 
+c1 = 	1 
+c2 = 	2 
+c3 = 	3 
+c4 = 	2 
+c5 = 	1 
+
+Number of visited states: 169783074
+Number of solutions: 1

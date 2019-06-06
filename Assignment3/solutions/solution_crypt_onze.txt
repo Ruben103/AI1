@@ -1,0 +1,13 @@
+### Solution 1 ###
+U = 	8 
+N = 	1 
+E = 	9 
+F = 	7 
+O = 	2 
+Z = 	4 
+c1 = 	0 
+c2 = 	2 
+c3 = 	1 
+
+Number of visited states: 142472
+Number of solutions: 1
