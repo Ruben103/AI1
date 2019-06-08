@@ -228,18 +228,19 @@ def resolution(kb):
 
     return kb
 
+
 def init():
     """
     Makes an example hardcoded KB with clauses {~a,~b}, {a,~b,~c,~d}, {b,~d}, {c,~d}
     """
-    kb = []
-
-    kb.append(Clause("~a,~b"))
-    kb.append(Clause("a,~b,~c,~d"))
-    kb.append(Clause("b,~d"))
-    kb.append(Clause("c,~d"))
-    kb.append(Clause("d"))
-
+    kb = input("Enter knowledge base. '10' provides 10 variables 15 line proof.\n")
+    if kb == "10":
+        kb = ["~a,~b","a,~b","b,~x,~y","x,~y","~w,y,~z","w,~z","~d,z",
+              "d,~e","e,~f","f,~g","g,~h","h,~i","i,~j","j,~k","k,~l",
+              "l"]
+    else:
+        kb = kb[2:-2].split("],[")
+    kb = [Clause(clause) for clause in kb]
     return kb
 
 ##
@@ -274,32 +275,12 @@ def print_proof(clause_set):
     idx = find_index_of_clause(empty_clause, clause_set)
     recursive_print_proof(idx, clause_set)
 
-def randomPremises(variables, n=15):
-    kb = []
-    for i in range(n):
-        string = '['
-        rand = random.random()
-        if rand > 0.5:
-            string += "~"
-        string += random.choice(variables)
-        for j in range(random.randint(0,5)):
-            string += ',~' + random.choice(variables)
-
-        string += ']'
-        kb.append(string)
-    return kb
-
 
 def main():
-    variables = ['p','q','r','s','t','u','v','w','x','y',]
-    premises = randomPremises(variables, 15)
-    
     kb = init()
 
     print("KB=", end='')
     print_clause_set(kb)
-
-    
 
     kb = resolution(kb)
 
